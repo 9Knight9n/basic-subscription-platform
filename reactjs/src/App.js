@@ -1,5 +1,5 @@
-import { BrowserRouter,Routes, Route, Navigate } from "react-router-dom";
-import { notification } from 'antd';
+import { BrowserRouter,Routes, Route } from "react-router-dom";
+import { notification, Button } from 'antd';
 import {useState,useEffect} from 'react'
 
 // css
@@ -23,6 +23,9 @@ function App() {
   return (
     <BrowserRouter>
       {contextHolder}
+        {token?<div style={{position:'absolute',bottom:'0', margin:'5px'}}><Button danger type="primary" onClick={() => {setToken(null)}}>
+            Log out
+        </Button></div>:""}
       <div className={'center'}>
           <Routes>
               <Route index element={

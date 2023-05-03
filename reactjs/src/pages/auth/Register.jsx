@@ -44,9 +44,6 @@ function Register (props) {
         style={{
             width: 300,
         }}
-        // initialValues={{
-        //     remember: true,
-        // }}
         onFinish={onFinish}
         autoComplete="off"
     >
