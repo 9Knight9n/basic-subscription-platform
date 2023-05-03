@@ -45,9 +45,10 @@ INSTALLED_APPS = [
     # external apps
     'rest_framework',
     'knox',
+    'corsheaders',
 
     # internal apps
-    'authentication'
+    'authentication',
 ]
 
 REST_FRAMEWORK = {
@@ -62,14 +63,17 @@ REST_KNOX = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'core.urls'
 

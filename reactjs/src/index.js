@@ -1,14 +1,15 @@
+import "antd/dist/antd.min.css";
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ConfigProvider } from 'antd';
+import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <ConfigProvider direction="ltr">
+      <ConfigProvider>
         <App />
       </ConfigProvider>
   </React.StrictMode>

@@ -5,6 +5,6 @@ function RequireAuth(props) {
   if (!props.token) {
     return <Navigate to={"/login"} />;
   }
-
   return props.children;
 };
+export default RequireAuth;

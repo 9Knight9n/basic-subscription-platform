@@ -1,4 +1,3 @@
-@import '~antd/dist/antd.css';
 
 #root {
   width: 100%;
@@ -6,18 +5,16 @@
 }
 
 body,html {
-  direction: rtl;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.main-container-md {
-  position: relative;
-  top: 5rem;
-  right: 50%;
-  transform: translateX(50%);
-  width: 75vw;
-  /*height: 75vh;*/
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 

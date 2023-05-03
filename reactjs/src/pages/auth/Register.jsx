@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState } from 'react';
 import './style.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import { useNavigate, Link } from "react-router-dom";
 import {baseURL} from "../../components/config";
 
 
-function Login (props) {
+function Register (props) {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+
     const onFinish = async (values) => {
         setLoading(true)
         var formdata = new FormData();
@@ -21,21 +23,30 @@ function Login (props) {
             redirect: 'follow'
         };
 
-        await fetch(baseURL + '/api/auth/login/', requestOptions).then(response => response.text())
+        await fetch(baseURL + '/api/auth/register/', requestOptions).then(response => response.text())
             .then(response => {
                 let temp = JSON.parse(response);
                 props.setToken(temp.token)
-                navigate("/");
-                return;
+                props.notif.success({
+                    message: `Registered successfully.`,
+                    description: 'You can now log in with your credentials.',
+                    placement: 'top',
+                });
+                navigate("/login");
+                return
             }).catch(error => console.log('error', error));
-        setLoading(false)
+        setLoading(false);
     };
 
-    return (<Form
+    return (
+    <Form
         name="basic"
         style={{
             width: 300,
         }}
+        // initialValues={{
+        //     remember: true,
+        // }}
         onFinish={onFinish}
         autoComplete="off"
     >
@@ -69,13 +80,13 @@ function Login (props) {
 
         <Form.Item>
             <Button type="primary" htmlType="submit" style={{width: '100%'}} loading={loading}>
-                Log in
+                Sign up
             </Button>
         </Form.Item>
-        <span>Not registered? </span>
-        <Link to={'/register'}>
-            sign up here.
+        <span>Already registered? </span>
+        <Link to={'/login'}>
+            log in here.
         </Link>
     </Form>);
 };
-export default Login;
+export default Register;

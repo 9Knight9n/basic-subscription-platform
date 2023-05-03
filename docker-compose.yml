@@ -45,9 +45,6 @@ services:
     ports:
       - "${REACTJS_PORT}:3000"
     environment:
-      - DJANGO_URL=django
-      - DJANGO_PORT=${DJANGO_PORT}
-      - WDS_SOCKET_HOST=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=${NODE_ENV}
       - WATCHPACK_POLLING=true
