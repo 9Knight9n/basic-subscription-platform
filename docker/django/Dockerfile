@@ -1,0 +1,24 @@
+FROM public.ecr.aws/docker/library/python:3.10-slim-bullseye
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONUNBUFFERED 1
+ARG PYTHONDONTWRITEBYTECODE
+
+WORKDIR /code
+
+COPY ./backend/requirements.txt .
+
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends build-essential curl libpq-dev netcat && \
+    apt-get clean
+
+RUN pip install --upgrade pip
+
+RUN pip install -r requirements.txt
+
+COPY ./docker/django/entrypoint.sh /home
+RUN chmod +x /home/entrypoint.sh
+
+COPY ./django/ .
+
+ENTRYPOINT ["/home/entrypoint.sh"]

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  django:
+    env_file:
+      - docker/django/.env
+    build:
+      dockerfile: docker/django/Dockerfile
+      context: .
+      args:
+        - "PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE}"
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    volumes:
+      - ./django:/code
+    ports:
+      - "${BACKEND_PORT}:8000"
+    depends_on:
+      - db
+
+
+  db:
+    image: public.ecr.aws/docker/library/postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+
+volumes:
+  postgres_data:
