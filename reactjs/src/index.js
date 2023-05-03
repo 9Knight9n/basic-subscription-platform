@@ -8,7 +8,7 @@ import { ConfigProvider } from 'antd';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <ConfigProvider direction="rtl">
+      <ConfigProvider direction="ltr">
         <App />
       </ConfigProvider>
   </React.StrictMode>

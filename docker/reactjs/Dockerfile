@@ -7,7 +7,7 @@ WORKDIR /code
 ENV PATH /code/node_modules/.bin:$PATH
 
 # install app dependencies
-COPY ./reactjs/package.jhson /code
+COPY ./reactjs/package.json /code
 COPY ./reactjs/package-lock.json /code
 RUN npm cache verify
 RUN npm install

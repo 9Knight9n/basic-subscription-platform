@@ -8,7 +8,6 @@
 body,html {
   direction: rtl;
   margin: 0;
-  font-family: 'Mikhak-Bold', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -22,19 +21,3 @@ body,html {
   /*height: 75vh;*/
 }
 
-@font-face {
-  font-family: 'Mikhak-Regular';
-  src: local('Mikhak-Regular'), url(./fonts/Mikhak-Regular.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Mikhak-Bold';
-  font-weight: 900;
-  src: local('Mikhak-Bold'), url(./fonts/Mikhak-Bold.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Mikhak-Black';
-  font-weight: 900;
-  src: local('Mikhak-Black'), url(./fonts/Mikhak-Black.ttf) format('truetype');
-}
