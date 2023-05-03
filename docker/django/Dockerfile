@@ -6,7 +6,7 @@ ARG PYTHONDONTWRITEBYTECODE
 
 WORKDIR /code
 
-COPY ./backend/requirements.txt .
+COPY ./django/requirements.txt .
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends build-essential curl libpq-dev netcat && \
