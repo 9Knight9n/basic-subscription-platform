@@ -33,14 +33,33 @@ ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
 # Application definition
 
 INSTALLED_APPS = [
+
+    # default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # external apps
+    'rest_framework',
+    'knox',
+
+    # internal apps
     'authentication'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+}
+
+REST_KNOX = {
+    # set tokens not to expire at all
+    # to make it easier to handle it in frontend
+    'TOKEN_TTL': None,
+    'TOKEN_LIMIT_PER_USER': 1,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

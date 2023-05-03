@@ -9,7 +9,7 @@ WORKDIR /code
 COPY ./django/requirements.txt .
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends build-essential curl libpq-dev netcat && \
+    apt-get install -y --no-install-recommends build-essential curl libpq-dev netcat libssl-dev libffi-dev && \
     apt-get clean
 
 RUN pip install --upgrade pip
