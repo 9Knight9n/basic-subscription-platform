@@ -3,10 +3,13 @@ from rest_framework import generics, authentication, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from .serializers import UserSerializer, AuthSerializer
+from subscription.serializers import CustomerSerializer
+from django.forms.models import model_to_dict
+from subscription.models import Customer
 
 
 class RegisterView(generics.CreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = CustomerSerializer
 
 
 class LoginView(KnoxLoginView):
@@ -18,7 +21,16 @@ class LoginView(KnoxLoginView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return super(LoginView, self).post(request, format=None)
+        response = super(LoginView, self).post(request, format=None)
+        customer = Customer.objects.get(user=user)
+        print(customer.__dict__)
+        customer_dict = customer.__dict__
+        print(customer_dict)
+        response.data['username'] = user.username
+        response.data['id'] = customer_dict['id']
+        response.data['credit'] = customer_dict['credit']
+        del response.data['expiry']
+        return response
 
 
 class ProfileView(generics.RetrieveUpdateAPIView):
