@@ -12,12 +12,11 @@ RUN apt-get update -y && \
 
 RUN pip install --upgrade pip
 
-COPY ./docker/django/entrypoint.sh /home
-RUN chmod +x /home/entrypoint.sh
-
 COPY ./django/requirements.txt .
 RUN pip install -r requirements.txt
 
+COPY ./docker/django/entrypoint.sh /home
+RUN chmod +x /home/entrypoint.sh
 
 COPY ./django/ .
 
