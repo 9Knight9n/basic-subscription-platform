@@ -37,6 +37,5 @@ class ActiveSubscriptionView(APIView):
                 customer__user__id=request.user.id,
                 subscription__id=request.data['subscription__id']
             ).save()
-        cus_sub.is_active = not cus_sub.is_active
-        cus_sub.save()
+        cus_sub.custom_save(not cus_sub.is_active)
         return Response({'is_active': cus_sub.is_active})

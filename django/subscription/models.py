@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.db import transaction
 
 
 class Customer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-    credit = models.IntegerField(verbose_name="customer credit", null=False, blank=False, default=0)
+    credit = models.PositiveIntegerField(verbose_name="customer credit", null=False, blank=False, default=0)
 
     def __str__(self):
         return self.user.username
@@ -15,8 +16,8 @@ class Customer(models.Model):
 class Subscription(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Subscription name", null=False, blank=False, unique=True)
-    price = models.IntegerField(verbose_name="Subscription price", null=False, blank=False)
-    renewal_period = models.IntegerField(
+    price = models.PositiveIntegerField(verbose_name="Subscription price", null=False, blank=False)
+    renewal_period = models.PositiveIntegerField(
         verbose_name="time between Subscription renewal in seconds", null=False, blank=False, default=10 * 60
     )
 
@@ -35,6 +36,21 @@ class CustomerSubscription(models.Model):
 
     class Meta:
         unique_together = ('customer', 'subscription')
+
+    @transaction.atomic
+    def custom_save(self, new_is_active):
+        if new_is_active == self.is_active:
+            return self
+        if new_is_active:
+            if self.subscription.price >= self.customer.credit:
+                Invoice(customer_subscription=self).save()
+                self.customer.credit = self.customer.credit - self.subscription.price
+                self.customer.save()
+            else:
+                return self
+        self.is_active = new_is_active
+        self.save()
+        return self
 
 
 class Invoice(models.Model):
