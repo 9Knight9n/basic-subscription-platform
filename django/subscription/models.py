@@ -8,6 +8,9 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
     credit = models.IntegerField(verbose_name="customer credit", null=False, blank=False, default=0)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Subscription(models.Model):
     id = models.AutoField(primary_key=True)
@@ -19,6 +22,9 @@ class Subscription(models.Model):
 
     class Meta:
         ordering = ['price']
+
+    def __str__(self):
+        return self.name
 
 
 class CustomerSubscription(models.Model):
