@@ -40,17 +40,17 @@ class CustomerSubscription(models.Model):
     @transaction.atomic
     def custom_save(self, new_is_active):
         if new_is_active == self.is_active:
-            return self
+            return self, False
         if new_is_active:
             if self.subscription.price <= self.customer.credit:
                 Invoice(customer_subscription=self).save()
                 self.customer.credit = self.customer.credit - self.subscription.price
                 self.customer.save()
             else:
-                return self
+                return self , False
         self.is_active = new_is_active
         self.save()
-        return self
+        return self , True
 
 
 class Invoice(models.Model):

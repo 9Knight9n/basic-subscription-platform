@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from .models import Subscription, CustomerSubscription, Invoice, Customer
 from datetime import timedelta, datetime
 from django.db.models import F, ExpressionWrapper, DurationField, DateTimeField
+from .tasks import create_invoice
 
 
 class CustomerAvailableSubscriptionView(APIView):
@@ -53,7 +54,9 @@ class ActivateSubscriptionView(APIView):
                 subscription_id=request.data['subscription__id']
             )
             cus_sub.save()
-        cus_sub.custom_save(not cus_sub.is_active)
+        cus_sub, status = cus_sub.custom_save(not cus_sub.is_active)
+        if status:
+            create_invoice.apply_async(args=[cus_sub.id], countdown=cus_sub.subscription.renewal_period)
         return Response({'is_active': cus_sub.is_active})
 
 
