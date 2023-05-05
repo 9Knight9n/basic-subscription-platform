@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, serializers, authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Subscription, CustomerSubscription, Invoice, Customer
+from datetime import timedelta, datetime
+from django.db.models import F, ExpressionWrapper, DurationField, DateTimeField
 
 
 class CustomerAvailableSubscriptionView(APIView):
@@ -24,7 +26,14 @@ class CustomerInvoiceView(APIView):
         page = int(self.request.query_params.get('page'))
         start = PAGE_SIZE*(page-1)
         end = min([PAGE_SIZE*page,count])
-        invoices = Invoice.objects.filter(customer_subscription__customer__user__id=request.user.id)[start:end].values()
+        invoices = Invoice.objects.filter(
+            customer_subscription__customer__user__id=request.user.id
+        )[start:end].values(
+            'customer_subscription__subscription__renewal_period',
+            'created_at',
+            'customer_subscription__subscription__name',
+            'customer_subscription__subscription__price'
+        )
         return Response({'count': count, 'customer_invoices': invoices})
 
 

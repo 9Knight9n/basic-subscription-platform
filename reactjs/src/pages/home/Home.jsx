@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Profile from "./components/Profile";
 import { Tabs } from 'antd';
 import Subscription from "./components/Subscription";
+import Invoice from "./components/Invoice";
 
 
 function Home (props) {
@@ -14,12 +15,12 @@ function Home (props) {
         {
             key: '1',
             label: 'Subscriptions',
-            children: <Subscription token={props.token} id={props.id}/>,
+            children: <Subscription token={props.token}/>,
         },
         {
             key: '2',
             label: 'Invoices',
-            children: `Content of Tab Pane 2`,
+            children: <Invoice token={props.token}/>,
         },
     ];
 
@@ -30,9 +31,9 @@ function Home (props) {
 
 
     return (
-        <div style={{display:'flex',flexDirection:'column'}}>
+        <div style={{display:'flex',flexDirection:'column',width:'600px'}}>
             <Profile id={props.id} username={props.username} credit={props.credit}/>
-            <Tabs style={{width:'500px'}} defaultActiveKey="1" items={items}/>
+            <Tabs defaultActiveKey="1" items={items}/>
         </div>
     );
 };
