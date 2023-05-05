@@ -4,8 +4,9 @@ services:
   django:
     build:
       dockerfile: docker/django/Dockerfile
+      target: django_with_entrypoint
       args:
-        - "PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE}"
+        - PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE}
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - POSTGRES_HOST=postgresql
@@ -21,8 +22,6 @@ services:
     ports:
       - "${DJANGO_PORT}:8000"
     depends_on:
-      - postgresql
-      - redis
       - celery
 
 
@@ -59,8 +58,9 @@ services:
   celery:
     build:
       dockerfile: docker/django/Dockerfile
+      target: django
       args:
-        - "PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE}"
+        - PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE}
     command: celery -A core worker -l info
     environment:
       - POSTGRES_HOST=postgresql

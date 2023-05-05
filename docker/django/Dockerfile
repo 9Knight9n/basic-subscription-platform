@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.10-slim-bullseye
+FROM public.ecr.aws/docker/library/python:3.10-slim-bullseye AS django
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PYTHONUNBUFFERED 1
@@ -15,9 +15,11 @@ RUN pip install --upgrade pip
 COPY ./django/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./docker/django/entrypoint.sh /home
-RUN chmod +x /home/entrypoint.sh
-
 COPY ./django/ .
 
-ENTRYPOINT ["/home/entrypoint.sh"]
+
+FROM django AS django_with_entrypoint
+
+COPY ./docker/django/entrypoint.sh /home
+RUN chmod +x /home/entrypoint.sh
+ENTRYPOINT ["/bin/bash", "/home/entrypoint.sh"]
