@@ -22,9 +22,18 @@ function Register (props) {
             redirect: 'follow'
         };
 
-        await fetch(baseURL + '/api/auth/register/', requestOptions).then(response => response.text())
-            .then(response => {
-                let temp = JSON.parse(response);
+        await fetch(baseURL + '/api/auth/register/', requestOptions).then(async response => {
+            let temp = JSON.parse(await response.text());
+            console.log(temp)
+            if (response.status !== 201) {
+                for (const [key, value] of Object.entries(temp)) {
+                    props.notif.error({
+                        message: 'error (' + key + ")",
+                        description: value,
+                        placement: 'top',
+                    });
+                }
+            } else {
                 props.setToken(temp.token)
                 props.notif.success({
                     message: `Registered successfully.`,
@@ -32,8 +41,8 @@ function Register (props) {
                     placement: 'top',
                 });
                 navigate("/login");
-                return
-            }).catch(error => console.log('error', error));
+            }
+        }).catch(error => console.log('error', error));
         setLoading(false);
     };
 
