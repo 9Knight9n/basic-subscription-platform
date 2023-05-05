@@ -1,4 +1,4 @@
-import { BrowserRouter,Routes, Route } from "react-router-dom";
+import { BrowserRouter,Routes, Route, Navigate } from "react-router-dom";
 import { notification, Button } from 'antd';
 import {useState,useEffect} from 'react'
 
@@ -36,24 +36,12 @@ function App() {
                       <Home token={token} id={id} username={username} credit={credit}/>
                   </RequireAuth>
               }/>
-              {/*<Route path="/" element={<p>Home</p>}/>*/}
-              <Route path="/login" element={<Login
+              <Route path="/login" element={<Login notif={api}
                   setUsername={setUsername} setToken={setToken}
                   setId={setId} setCredit={setCredit}/>}
               />
               <Route path="/register" element={<Register notif={api} setToken={setToken}/>}/>
-              {/*<Route path="extract" element={<ExtractPage />} >*/}
-              {/*    <Route index element={<Navigate to="selectcollection" replace />} />*/}
-              {/*    <Route path={'selectcollection'} element={<SelectCollection/>} />*/}
-              {/*    <Route path={'selectuser/:collection'} element={<SelectUser/>} />*/}
-              {/*    <Route path={'extractprogress/:collection'} element={<ExtractProgress/>} />*/}
-              {/*    <Route path="*" element={<Navigate to="selectcollection" replace />} />*/}
-              {/*</Route>*/}
-              {/*<Route path="result" element={<ResultPage />} >*/}
-              {/*    <Route path={"useranalysis/:collection"} element={<UserAnalysis/>} />*/}
-              {/*    <Route path={"collectionanalysis/:collection"} element={<CollectionAnalysis/>} />*/}
-              {/*</Route>*/}
-              {/*<Route path="*" element={<Navigate to="/" replace />} />*/}
+              <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
       </div>
     </BrowserRouter>

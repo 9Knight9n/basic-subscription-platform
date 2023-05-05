@@ -20,15 +20,26 @@ function Login (props) {
             redirect: 'follow'
         };
 
-        await fetch(baseURL + '/api/auth/login/', requestOptions).then(response => response.text())
-            .then(response => {
-                let temp = JSON.parse(response);
-                props.setToken(temp.token)
-                props.setId(temp.id)
-                props.setUsername(temp.username)
-                props.setCredit(temp.credit)
-                navigate("/");
-                return;
+        await fetch(baseURL + '/api/auth/login/', requestOptions)
+            .then(async response => {
+                let temp = JSON.parse(await response.text());
+
+                if (response.status !== 200) {
+                    for (const [key, value] of Object.entries(temp)) {
+                        props.notif.error({
+                            message: 'error (' + key + ")",
+                            description: value,
+                            placement: 'top',
+                        });
+                    }
+                }
+                else {
+                    props.setToken(temp.token)
+                    props.setId(temp.id)
+                    props.setUsername(temp.username)
+                    props.setCredit(temp.credit)
+                    navigate("/");
+                }
             }).catch(error => console.log('error', error));
         setLoading(false)
     };
