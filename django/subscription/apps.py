@@ -12,3 +12,6 @@ class SubscriptionConfig(AppConfig):
             from .models import CustomerSubscription
             pre_load_data()
             CustomerSubscription.objects.all().update(is_active=False)
+            from core.celery import app as celery_app
+
+            __all__ = ("celery_app",)
