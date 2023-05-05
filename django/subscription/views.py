@@ -55,3 +55,16 @@ class ActivateSubscriptionView(APIView):
             cus_sub.save()
         cus_sub.custom_save(not cus_sub.is_active)
         return Response({'is_active': cus_sub.is_active})
+
+
+class AddCreditView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        customer = Customer.objects.get(user__id = request.user.id)
+        add_credit = int(request.data['credit'])
+        if add_credit > 0:
+            customer.credit += add_credit
+            customer.save()
+        return Response({'new_credit': customer.credit})
+

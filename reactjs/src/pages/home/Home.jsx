@@ -32,7 +32,7 @@ function Home (props) {
 
     return (
         <div style={{display:'flex',flexDirection:'column',width:'600px'}}>
-            <Profile id={props.id} username={props.username} credit={props.credit}/>
+            <Profile id={props.id} username={props.username} credit={props.credit} token={props.token}/>
             <Tabs defaultActiveKey="1" items={items}/>
         </div>
     );

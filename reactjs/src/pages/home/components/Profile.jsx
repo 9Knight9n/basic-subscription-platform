@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { Descriptions, Space, Button, InputNumber  } from 'antd';
+import {baseURL} from "../../../components/config";
 
 
 function Profile (props) {
-    // const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [credit, setCredit] = useState(props.credit);
     // const navigate = useNavigate();
 
     // useEffect(() => {
@@ -12,12 +14,36 @@ function Profile (props) {
     //         navigate("/login")
     // }, [props.token]);
 
+    function addCredit() {
+        let addCredit = parseInt(document.getElementById('add-credit').value.replace("$","").replace(",",""))
+        setLoading(true)
+        var myHeaders = new Headers();
+        myHeaders.append("authorization", "token " + props.token);
+
+        var formdata = new FormData();
+        formdata.append("credit", addCredit.toString());
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch(baseURL + "/api/subs/add_credit_view/", requestOptions)
+            .then(response => response.text())
+            .then(response => {
+                let temp = JSON.parse(response);
+                setCredit(temp.new_credit)
+                setLoading(false)
+            }).catch(error => console.log('error', error));
+    }
 
     return (
         <>
             <Descriptions column={3} title="User Info">
                 <Descriptions.Item label="UserName" span={2}>{props.username}</Descriptions.Item>
-                <Descriptions.Item label="Credit">{props.credit}$</Descriptions.Item>
+                <Descriptions.Item label="Credit">{credit}$</Descriptions.Item>
                 <Descriptions.Item label="ID" span={2}>{props.id}</Descriptions.Item>
                 <Descriptions.Item >
                     <Space.Compact
@@ -25,11 +51,11 @@ function Profile (props) {
                             width: '100%',
                         }}
                     >
-                        <InputNumber step={100} defaultValue={1000}
+                        <InputNumber id={"add-credit"} min={10} max={10000} step={100} defaultValue={1000}
                                      formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                      parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                         />
-                        <Button type="primary" >Add Credit</Button>
+                        <Button loading={loading} type="primary" onClick={addCredit}>Add Credit</Button>
                     </Space.Compact>
                 </Descriptions.Item>
             </Descriptions>
