@@ -30,9 +30,9 @@ class Subscription(models.Model):
 
 class CustomerSubscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.OneToOneField(Customer, on_delete=models.DO_NOTHING)
-    subscription = models.OneToOneField(Subscription, on_delete=models.DO_NOTHING)
-    is_active = models.BooleanField(verbose_name="is customer using Subscription", null=False, blank=False, default=0)
+    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    subscription = models.ForeignKey(Subscription, on_delete=models.DO_NOTHING)
+    is_active = models.BooleanField(verbose_name="is customer using Subscription", null=False, blank=False, default=False)
 
     class Meta:
         unique_together = ('customer', 'subscription')
@@ -42,9 +42,14 @@ class CustomerSubscription(models.Model):
         if new_is_active == self.is_active:
             return self
         if new_is_active:
-            if self.subscription.price >= self.customer.credit:
+            print('here')
+            print(self.subscription.price)
+            print(self.customer.credit)
+            if self.subscription.price <= self.customer.credit:
+                print('here2')
                 Invoice(customer_subscription=self).save()
                 self.customer.credit = self.customer.credit - self.subscription.price
+                print(self.customer.credit)
                 self.customer.save()
             else:
                 return self
@@ -55,7 +60,7 @@ class CustomerSubscription(models.Model):
 
 class Invoice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer_subscription = models.OneToOneField(CustomerSubscription, on_delete=models.DO_NOTHING)
+    customer_subscription = models.ForeignKey(CustomerSubscription, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(
         verbose_name="date and time Invoice was created", null=False, blank=False, auto_now_add=True
     )

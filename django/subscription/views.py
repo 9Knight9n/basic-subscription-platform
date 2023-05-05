@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, serializers, authentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Subscription, CustomerSubscription, Invoice
+from .models import Subscription, CustomerSubscription, Invoice, Customer
 
 
 class CustomerAvailableSubscriptionView(APIView):
@@ -15,27 +15,34 @@ class CustomerAvailableSubscriptionView(APIView):
         return Response({'available_subscription': subs})
 
 
-class CustomerInvoicesView(APIView):
+class CustomerInvoiceView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        invoices = Invoice.objects.filter(customer_subscription__customer__user__id=request.user.id).values()
-        return Response({'customer_invoices': invoices})
+        PAGE_SIZE = 5
+        count = Invoice.objects.filter(customer_subscription__customer__user__id=request.user.id).count()
+        page = int(self.request.query_params.get('page'))
+        start = PAGE_SIZE*(page-1)
+        end = min([PAGE_SIZE*page,count])
+        invoices = Invoice.objects.filter(customer_subscription__customer__user__id=request.user.id)[start:end].values()
+        return Response({'count': count, 'customer_invoices': invoices})
 
 
-class ActiveSubscriptionView(APIView):
+class ActivateSubscriptionView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
+        customer = Customer.objects.get(user__id = request.user.id)
         try:
             cus_sub = CustomerSubscription.objects.get(
-                customer__user__id=request.user.id,
+                customer=customer,
                 subscription__id=request.data['subscription__id']
             )
         except CustomerSubscription.DoesNotExist:
             cus_sub = CustomerSubscription(
-                customer__user__id=request.user.id,
-                subscription__id=request.data['subscription__id']
-            ).save()
+                customer=customer,
+                subscription_id=request.data['subscription__id']
+            )
+            cus_sub.save()
         cus_sub.custom_save(not cus_sub.is_active)
         return Response({'is_active': cus_sub.is_active})
