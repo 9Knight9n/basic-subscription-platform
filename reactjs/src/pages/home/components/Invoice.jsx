@@ -12,7 +12,6 @@ function Invoice (props) {
             pageSize: 5,
     });
     const fetchData = (page) => {
-        console.log(page)
         setLoading(true);
         var myHeaders = new Headers();
         myHeaders.append("authorization", "token " + props.token);
