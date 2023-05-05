@@ -15,7 +15,7 @@ function Home (props) {
         {
             key: '1',
             label: 'Subscriptions',
-            children: <Subscription token={props.token}/>,
+            children: <Subscription notif={props.notif} token={props.token}/>,
         },
         {
             key: '2',

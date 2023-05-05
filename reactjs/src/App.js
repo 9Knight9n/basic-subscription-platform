@@ -33,7 +33,7 @@ function App() {
           <Routes>
               <Route index element={
                   <RequireAuth token={token}>
-                      <Home token={token} id={id} username={username} credit={credit}/>
+                      <Home notif={api} token={token} id={id} username={username} credit={credit}/>
                   </RequireAuth>
               }/>
               <Route path="/login" element={<Login notif={api}

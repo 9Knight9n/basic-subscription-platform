@@ -66,7 +66,7 @@ class AddCreditView(APIView):
     def post(self, request, format=None):
         customer = Customer.objects.get(user__id = request.user.id)
         add_credit = int(request.data['credit'])
-        if add_credit > 0:
+        if add_credit >= 0:
             customer.credit += add_credit
             customer.save()
         return Response({'new_credit': customer.credit})

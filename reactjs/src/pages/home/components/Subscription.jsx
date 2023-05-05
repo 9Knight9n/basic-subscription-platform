@@ -10,6 +10,14 @@ function Subscription (props) {
     const [dataActive, setDataActive] = useState([]);
 
     useEffect(() => {
+        fetchData()
+        var intervalId = window.setInterval(function(){
+            fetchData()
+        }, 1000);
+    }, []);
+
+
+    function fetchData() {
         var myHeaders = new Headers();
         myHeaders.append("authorization", "token " + props.token);
 
@@ -31,7 +39,7 @@ function Subscription (props) {
                 for (let i=0; i<n; ++i) temp.available_subscription[i]['key'] = i;
                 setData(temp.available_subscription)
             }).catch(error => console.log('error', error));
-    }, []);
+    }
 
 
     const columns = [
@@ -87,11 +95,22 @@ function Subscription (props) {
             .then(response => response.text())
             .then(response => {
                 let temp = JSON.parse(response);
-                setDataActive([
-                    ...dataActive.slice(0,index),
-                    temp.is_active,
-                    ...dataActive.slice(index+1,dataActive.length)]
-                )
+                if (temp.is_active === dataActive[index])
+                {
+                    props.notif.error({
+                        message: 'Failed to activate subscription.',
+                        description: "You don't have enough credit.",
+                        placement: 'top',
+                    });
+                }
+                else {
+                    setDataActive([
+                        ...dataActive.slice(0,index),
+                        temp.is_active,
+                        ...dataActive.slice(index+1,dataActive.length)]
+                    )
+                }
+
             }).catch(error => console.log('error', error));
 
 

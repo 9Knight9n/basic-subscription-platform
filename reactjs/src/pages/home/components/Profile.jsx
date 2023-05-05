@@ -9,14 +9,17 @@ function Profile (props) {
     const [credit, setCredit] = useState(props.credit);
     // const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (!props.token)
-    //         navigate("/login")
-    // }, [props.token]);
+    useEffect(() => {
+        var intervalId = window.setInterval(function(){
+            addCredit(0)
+        }, 1000);
+    }, []);
 
-    function addCredit() {
-        let addCredit = parseInt(document.getElementById('add-credit').value.replace("$","").replace(",",""))
-        setLoading(true)
+    function addCredit(addCredit) {
+        if (!Number.isInteger(addCredit)) {
+            setLoading(true)
+            addCredit = parseInt(document.getElementById('add-credit').value.replace("$", "").replace(",", ""))
+        }
         var myHeaders = new Headers();
         myHeaders.append("authorization", "token " + props.token);
 

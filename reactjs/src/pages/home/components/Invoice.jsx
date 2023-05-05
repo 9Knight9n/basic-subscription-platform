@@ -6,13 +6,12 @@ import {baseURL} from "../../../components/config";
 function Invoice (props) {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [pagination, setPagination] = useState({
-            current: 1,
-            pageSize: 5,
-    });
-    const fetchData = (page) => {
-        setLoading(true);
+    const [current, setCurrent] = useState(1);
+    const [total, setTotal] = useState(0);
+    const [intervalId, setIntervalId] = useState(-1);
+
+    const fetchData = () => {
+        // setLoading(true);
         var myHeaders = new Headers();
         myHeaders.append("authorization", "token " + props.token);
 
@@ -22,26 +21,27 @@ function Invoice (props) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/subs/customer_invoice_view/?page=" + page, requestOptions)
+        fetch(baseURL + "/api/subs/customer_invoice_view/?page=" + current, requestOptions)
             .then(response => response.text())
             .then(response => {
                 let temp = JSON.parse(response);
                 for (let i=0; i<temp.customer_invoices.length; ++i) temp.customer_invoices[i]['key'] = i;
                 setData(temp.customer_invoices);
-                setPagination({
-                        pageSize: pagination.pageSize,
-                        current: page,
-                        total: parseInt(temp.count),
-                });
-                setLoading(false);
+                setTotal(parseInt(temp.count))
+                // setLoading(false);
             }).catch(error => console.log('error', error));
 
     };
 
 
     useEffect(() => {
-        fetchData(1);
-    }, []);
+        fetchData(current);
+        window.clearInterval(intervalId)
+        let interval = window.setInterval(() => {
+            fetchData();
+        }, 1000);
+        setIntervalId(interval)
+    }, [current]);
 
 
     const columns = [
@@ -76,9 +76,11 @@ function Invoice (props) {
                 size={'small'}
                 columns={columns}
                 dataSource={data}
-                pagination={pagination}
-                loading={loading}
-                onChange={(page) => {fetchData(page.current)}}/>
+                pagination={{current:current,total:total,pageSize:5}}
+                // loading={loading}
+                onChange={(page_) => {
+                    setCurrent(page_.current)
+                }}/>
         </>
     );
 };
