@@ -14,7 +14,7 @@ class Customer(models.Model):
 
 
 class Subscription(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(verbose_name="Subscription name", null=False, blank=False, unique=True)
     price = models.PositiveIntegerField(verbose_name="Subscription price", null=False, blank=False)
     renewal_period = models.PositiveIntegerField(
@@ -42,14 +42,9 @@ class CustomerSubscription(models.Model):
         if new_is_active == self.is_active:
             return self
         if new_is_active:
-            print('here')
-            print(self.subscription.price)
-            print(self.customer.credit)
             if self.subscription.price <= self.customer.credit:
-                print('here2')
                 Invoice(customer_subscription=self).save()
                 self.customer.credit = self.customer.credit - self.subscription.price
-                print(self.customer.credit)
                 self.customer.save()
             else:
                 return self
