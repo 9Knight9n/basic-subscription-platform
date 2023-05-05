@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import './style.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import { useNavigate, Link } from "react-router-dom";
@@ -25,6 +24,9 @@ function Login (props) {
             .then(response => {
                 let temp = JSON.parse(response);
                 props.setToken(temp.token)
+                props.setId(temp.id)
+                props.setUsername(temp.username)
+                props.setCredit(temp.credit)
                 navigate("/");
                 return;
             }).catch(error => console.log('error', error));

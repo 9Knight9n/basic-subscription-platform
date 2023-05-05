@@ -14,7 +14,7 @@ class CustomerSerializer(serializers.Serializer):
         username = validated_data.pop('username')
         password = validated_data.pop('password')
         user_serializer = UserSerializer(data={'username': username, 'password': password})
-        user_serializer.is_valid()
+        user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
         return Customer.objects.create(user=user)
 

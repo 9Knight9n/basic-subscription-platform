@@ -9,12 +9,15 @@ import './App.css';
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import RequireAuth from './components/RequireAuth'
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 
 
 
 function App() {
   const [token, setToken] = useState(null);
+  const [id, setId] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [credit, setCredit] = useState(0);
   const [api, contextHolder] = notification.useNotification();
 
     // useEffect(() => {
@@ -30,13 +33,15 @@ function App() {
           <Routes>
               <Route index element={
                   <RequireAuth token={token}>
-                    <Home token={token}/>
-                      {/*// <p>Home</p>*/}
+                      <Home token={token} id={id} username={username} credit={credit}/>
                   </RequireAuth>
               }/>
               {/*<Route path="/" element={<p>Home</p>}/>*/}
-              <Route path="/login" element={<Login token={token} setToken={setToken}/>}/>
-              <Route path="/register" element={<Register notif={api} token={token} setToken={setToken}/>}/>
+              <Route path="/login" element={<Login
+                  setUsername={setUsername} setToken={setToken}
+                  setId={setId} setCredit={setCredit}/>}
+              />
+              <Route path="/register" element={<Register notif={api} setToken={setToken}/>}/>
               {/*<Route path="extract" element={<ExtractPage />} >*/}
               {/*    <Route index element={<Navigate to="selectcollection" replace />} />*/}
               {/*    <Route path={'selectcollection'} element={<SelectCollection/>} />*/}

@@ -1,5 +1,4 @@
 import React, {useState } from 'react';
-import './style.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, notification } from 'antd';
 import { useNavigate, Link } from "react-router-dom";

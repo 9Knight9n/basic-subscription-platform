@@ -23,9 +23,7 @@ class LoginView(KnoxLoginView):
         login(request, user)
         response = super(LoginView, self).post(request, format=None)
         customer = Customer.objects.get(user=user)
-        print(customer.__dict__)
         customer_dict = customer.__dict__
-        print(customer_dict)
         response.data['username'] = user.username
         response.data['id'] = customer_dict['id']
         response.data['credit'] = customer_dict['credit']
