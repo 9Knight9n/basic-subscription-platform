@@ -28,12 +28,20 @@ git clone https://github.com/9Knight9n/basic-subscription-platform.git
 ```
 cd basic-subscription-platform
 ```
+* Create .env file from example .env file (use copy instead of cp in linux)
+```
+cp .env.example .env
+```
 * Run project with docker compose
 ```
 docker compose up
 ```
+* Visit http://localhost:3001/ to start
 
-## Services
+
+## In-depth
+
+### Services
 Services used in application
 * Django: Back-end framework
 * PostgreSQL: Database
@@ -42,7 +50,7 @@ Services used in application
 * React.js: Front-end framework
 
 
-## TODO
+### TODO
 - [x] Initialize Django
 - [x] Dockerize Django and PostgreSQL
 - [x] Added Authentication (django Knox auth)
