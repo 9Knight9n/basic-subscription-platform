@@ -67,5 +67,5 @@ Services used in application
 - [x] Dockerize Celery
 - [x] Add Schedule Task
 - [x] Create readme
-- [ ] Replace Interval API calling with WebSocket. (interval API calling is used for updating front-end data, didn't had time implement WebSocket)
+- [ ] Replace Interval API calling with WebSocket. (interval API calling is used for updating front-end data, didn't had time to implement WebSocket)
 - [ ] Create Production version with Docker
