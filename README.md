@@ -8,7 +8,7 @@ Main use case scenario:
 * Log in
 * Add credits
 * Activate/buy a Subscription
-* Receive new invoice avery 10 seconds until either run out of credits or deactivate subscription
+* Receive new invoice every 10 seconds until either run out of credits or deactivate subscription
 * deactivate subscription
 
 ## Getting Started
